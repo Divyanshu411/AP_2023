@@ -1,64 +1,91 @@
+# Reads integers between a given minimum and maximum, using the prompt provided.
 def read_integer_between_numbers(prompt, mini, maximum):
     while True:
         try:
             users_input = int(input(prompt))
-            if maximum <= users_input >= mini:
+            if mini <= users_input <= maximum:
                 return users_input
             else:
                 print(f"Numbers from {mini} to {maximum} only.")
         except ValueError:
-            print("Sorry -numbor olny please")
+            print("Sorry, numbers only please.")
 
-
+# Reads a non-empty, alphabetical string, using the prompt provided.
 def read_nonempty_string(prompt):
     while True:
         users_input = input(prompt)
         if len(users_input) > 0 and users_input.isalpha():
             break
+        else:
+            print("Sorry, string mustn't be empty and must be alphabetical.")
     return users_input
 
-
+# Reads an integer value greater or equal to 0.
 def read_integer(prompt):
     while True:
         try:
             users_input = int(input(prompt))
             if users_input >= 0:
                 return users_input
+            else:
+                print("Sorry, input must be greater or equal to 0.")
         except ValueError:
-            print("Sorry -numbor olny please")
+            print("Sorry, numbers only please.")
 
 
+def read_float(prompt):
+    while True:
+        try:
+            users_input = float(input(prompt))
+            if users_input >= 0:
+                return users_input
+            else:
+                print("Sorry, input must be greater or equal to 0.")
+        except ValueError:
+            print("Sorry, numbers only please.")
+            
+
+# Reads the data for the runners from a given file, processes the lines and returns two lists with all the values.
 def runners_data():
-    with open("runners.txt") as input:
+    with open("Runners-1.txt") as input:
         lines = input.readlines()
     runners_name = []
     runners_id = []
     for line in lines:
-        split_line = line.split(",")
-        runners_name.append(split_line[0])
-        id = split_line[1].strip("\n")
-        runners_id.append(id)
+        split_line = line.strip().split(",")
+
+        if len(split_line) > 1:
+            runners_name.append(split_line[0])
+            id = split_line[1]
+            runners_id.append(id)
     return runners_name, runners_id
 
 
+# Displays the results of a race at a given location, selected by the user, and returns the values.
 def race_results(races_location):
     for i in range(len(races_location)):
-        print(f"{i}: {races_location[i]}")
+        print(f"{i+1}: {races_location[i]}")
     user_input = read_integer_between_numbers("Choice > ", 1, len(races_location))
     venue = races_location[user_input - 1]
     id, time_taken = reading_race_results(venue)
     return id, time_taken, venue
 
 
+# Reads the data for race venues from a given file, processes the lines, and returns a list with all the values.
 def race_venues():
-    with open("races.txt") as input:
+    with open("Races-1.txt") as input:
         lines = input.readlines()
     races_location = []
+    races_targettime = []
     for line in lines:
-        races_location.append(line.strip("\n"))
-    return races_location
+        split_line = line.strip().split(",")
+        if len(split_line) > 1:
+            races_location.append(split_line[0])
+            races_targettime.append(float(split_line[1].strip()))
+    return races_location, races_targettime
 
 
+# Returns the winner of a given race.
 def winner_of_race(id, time_taken):
     quickest_time = min(time_taken)
     winner = ""
@@ -68,67 +95,90 @@ def winner_of_race(id, time_taken):
     return winner
 
 
+# Displays the results of a race and the winner of said race.
 def display_races(id, time_taken, venue, fastest_runner):
-    MINUTE = 50
     print(f"Results for {venue}")
     print(f"="*37)
     minutes = []
     seconds = []
     for i in range(len(time_taken)):
-        minutes.append(time_taken[i] // MINUTE)
-        seconds.append(time_taken[i] % MINUTE)
+        minute, second = convert_time_to_minutes_and_seconds(time_taken[i])
+        minutes.append(minute)
+        seconds.append(second)
     for i in range(len(id)):
         print(f"{id[i]:<10s} {minutes[i]} minutes and {seconds[i]} seconds")
     print(f"{fastest_runner} won the race.")
 
 
-def users_venue(races_location, runners_id):
+# Takes a user input for a new race, noting its location, the times each racer took, and saves these to a file.
+def users_venue(races_location, races_targettime, runners_id):
     while True:
         user_location = read_nonempty_string("Where will the new race take place? ").capitalize()
         if user_location not in races_location:
             break
-    connection = open(f"{user_location}.txt", "a")
+        else:
+            print("Input new locations only.")
+
+    while True:
+        user_targettime = read_float("What will the target time for this new race be? ")
+        if user_targettime not in races_targettime:
+            break
+        else:
+            print("Input new locations only.")
+
+    connection = open(f"{user_location}.txt", "w")
     races_location.append(user_location)
+    races_targettime.append(user_targettime)
     time_taken = []
     updated_runners = []
     for i in range(len(runners_id)):
         time_taken_for_runner = read_integer(f"Time for {runners_id[i]} >> ")
-        if time_taken_for_runner = 0:
+        if time_taken_for_runner != 0:
             time_taken.append(time_taken_for_runner)
             updated_runners.append(runners_id[i])
-            print(f"{runners_id[i]},{time_taken_for_runner},", file=connection)
+            print(f"{runners_id[i]},{time_taken_for_runner}", file=connection)
     connection.close()
 
 
-def updating_races_file(races_location):
-    connection = open(f"races.txt", "w")
+# Updates the races file with new race information.
+def updating_races_file(races_location, races_targettime):
+    connection = open(f"Races-1.txt", "w")
     for i in range(len(races_location)):
-        print(races_location[i], file=connection)
+        print(f"{races_location[i]}, {races_targettime[i]}", file=connection)
     connection.close()
 
 
+# Displays competitors by county, for each county in the county codes file.
 def competitors_by_county(name, id):
-    print("Cork runners")
-    print("=" * 20)
-    for i in range(len(name)):
-        if id[i].startswith("CK"):
-            print(f"{name[i]} ({id[i]})")
-    print("Kerry runners")
-    print("=" * 20)
-    for i in range(len(name)):
-        if id[i].startswith("KY"):
-            print(f"{name[i]} ({id[i]})")
+    with open("County_codes-1.txt") as input:
+        lines = input.readlines()
+    county_names = []
+    county_codes = []
+    for line in lines:
+        split_line = line.split(",")
+        if len(split_line) > 1:
+            county_names.append(split_line[0].strip())
+            county_codes.append(split_line[1].strip())
+    for i in range(len(county_names)):
+        print(f"\n{county_names[i]} runners")
+        print("=" * 20)
+        for j in range(len(name)):
+            if id[j].startswith(county_codes[i]):
+                print(f"{name[j]} ({id[j]})")
 
 
+# Reads race results from the corresponding race's file and returns racers and their times taken.
 def reading_race_results(location):
     with open(f"{location}.txt") as input_type:
         lines = input_type.readlines()
     id = []
     time_taken = []
     for line in lines:
-        split_line = line.split(",".strip("\n"))
-        id.append(split_line[0])
-        time_taken.append(int(split_line[1].strip("\n")))
+        line = line.strip()
+        if line != "":
+            split_line = line.split(",".strip("\n"))
+            id.append(split_line[0])
+            time_taken.append(int(split_line[1].strip("\n")))
     return id, time_taken
 
 
@@ -138,9 +188,11 @@ def reading_race_results_of_relevant_runner(location, runner_id):
     id = []
     time_taken = []
     for line in lines:
-        split_line = line.split(",".strip("\n"))
-        id.append(split_line[0])
-        time_taken.append(int(split_line[1].strip("\n")))
+        line = line.strip()
+        if line != "":
+            split_line = line.split(",".strip("\n"))
+            id.append(split_line[0])
+            time_taken.append(int(split_line[1].strip("\n")))
     for i in range(len(id)):
         if runner_id == id[i]:
             time_relevant_runner = time_taken[i]
@@ -149,7 +201,7 @@ def reading_race_results_of_relevant_runner(location, runner_id):
 
 
 def displaying_winners_of_each_race(races_location):
-    print("Venue             Looser")
+    print("Venue             Winner")
     print("="*24)
     for i in range(len(races_location)):
         id, time_taken = reading_race_results(races_location[i])
@@ -166,8 +218,9 @@ def relevant_runner_info(runners_name, runners_id):
     return runner, id
 
 
+# Converts minutes to seconds and returns both the minutes and the remainder.
 def convert_time_to_minutes_and_seconds(time_taken):
-    MINUTE = 50
+    MINUTE = 60
     minutes = time_taken // MINUTE
     seconds = time_taken % MINUTE
     return minutes, seconds
@@ -179,8 +232,9 @@ def sorting_where_runner_came_in_race(location, time):
     time_taken = []
     for line in lines:
         split_line = line.split(",".strip("\n"))
-        t = int(split_line[1].strip("\n"))
-        time_taken.append(t)
+        if len(split_line) > 1:
+            t = int(split_line[1].strip("\n"))
+            time_taken.append(t)
 
     time_taken.sort()
     return time_taken.index(time) + 1, len(lines)
@@ -197,45 +251,46 @@ def displaying_race_times_one_competitor(races_location, runner, id):
             print(f"{races_location[i]} {minutes} mins {seconds} secs ({came_in_race} of {number_in_race})")
 
 
-def finding_name_of_winner(fastest_runner, id, runners_name):
-    runner = ""
-    for i in range(len(id)):
-        if fastest_runner == id[i]:
-            runner = runners_name[i]
-    return runner
+# def finding_name_of_winner(fastest_runner, id, runners_name):
+#     runner = ""
+#     for i in range(len(id)):
+#         if fastest_runner == id[i]:
+#             runner = runners_name[i]
+#     return runner
 
 
-def displaying_runners_who_have_won_at_least_one_race(races_location, runners_name, runners_id):
-    print(f"The following runners have all won at least one race:")
-    print(f"-" * 55)
-    winners = []
-    runners = []
-    for i, location in enumerate(races_location):
-        id, time_taken = reading_race_results(location)
-        fastest_runner = winner_of_race(id, time_taken)
-        name_of_runner = finding_name_of_winner(fastest_runner, runners_id, runners_name)
-        if fastest_runner not in winners:
-            winners.append(fastest_runner)
-            runners.append(name_of_runner)
-    for i, fastest_runner in enumerate(winners):
-        print(f"{runners[i]} ({fastest_runner})")
+# def displaying_runners_who_have_won_at_least_one_race(races_location, runners_name, runners_id):
+#     print(f"The following runners have all won at least one race:")
+#     print(f"-" * 55)
+#     winners = []
+#     runners = []
+#     for i, location in enumerate(races_location):
+#         id, time_taken = reading_race_results(location)
+#         fastest_runner = winner_of_race(id, time_taken)
+#         name_of_runner = finding_name_of_winner(fastest_runner, runners_id, runners_name)
+#         if fastest_runner not in winners:
+#             winners.append(fastest_runner)
+#             runners.append(name_of_runner)
+#     for i, fastest_runner in enumerate(winners):
+#         print(f"{runners[i]} ({fastest_runner})")
 
 
 def main():
-    races_location = race_venues()
+    races_location, races_targettime = race_venues()
+    print(races_targettime)
     runners_name, runners_id = runners_data()
-    MENU = "1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
+    MENU = "\n\n1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
            "\n4. Show the winner of each race \n5. Show all the race times for one competitor " \
            "\n6. Show all competitors who have won a race \n7. Quit \n>>> "
     input_menu = read_integer_between_numbers(MENU, 1, 7)
 
-    while input_menu == 7:
+    while input_menu != 7:
         if input_menu == 1:
             id, time_taken, venue = race_results(races_location)
             fastest_runner = winner_of_race(id, time_taken)
             display_races(id, time_taken, venue, fastest_runner)
-        elif input_menu != 2:
-            users_venue(races_location, runners_id)
+        elif input_menu == 2:
+            users_venue(races_location, races_targettime, runners_id)
         elif input_menu == 3:
             competitors_by_county(runners_name, runners_id)
         elif input_menu == 4:
@@ -243,11 +298,11 @@ def main():
         elif input_menu == 5:
             runner, id = relevant_runner_info(runners_name, runners_id)
             displaying_race_times_one_competitor(races_location, runner, id)
-        elif input_menu == 6:
-            displaying_runners_who_have_won_at_least_one_race(races_location, runners_name, runners_id)
-        print()
+        # elif input_menu == 6:
+        #     displaying_runners_who_have_won_at_least_one_race(races_location, runners_name, runners_id)
+        else: break
         input_menu = read_integer_between_numbers(MENU, 1, 7)
-    updating_races_file(races_location)
+    updating_races_file(races_location, races_targettime)
 
 
 main()

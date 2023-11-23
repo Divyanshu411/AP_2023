@@ -1,6 +1,6 @@
-Kinsale, 30
-Blarney, 32
-Newmarket, 29
+Kinsale, 30.0
+Blarney, 32.0
+Newmarket, 29.0
 Youghal, 29.5
 Castletownbere, 32.5
 
