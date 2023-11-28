@@ -277,7 +277,6 @@ def displaying_runners_who_have_won_at_least_one_race(races_location, runners_na
 
 def main():
     races_location, races_targettime = race_venues()
-    print(races_targettime)
     runners_name, runners_id = runners_data()
     MENU = "\n\n1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
            "\n4. Show the winner of each race \n5. Show all the race times for one competitor " \

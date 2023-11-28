@@ -117,6 +117,30 @@ class TestDone(unittest.TestCase):
         runners_id = ["CK-24", "CK-23", "KY-43"]
         expected_runner = "Anna Fox"
         expected_id = "CK-24"
+        runner, id = relevant_runner_info(runners_name, runners_id)
+        self.assertEqual(runner, expected_runner)
+        self.assertEqual(id, expected_id)
+
+    @patch('builtins.print')
+    def test_display_runners_who_won_at_least_once_input_menu_6(self, mock_print):
+        races_location = ['Kinsale', 'Blarney', 'Newmarket', 'Youghal', 'Castletownbere']
+        runners_name = ["Anna Fox", "Des Kelly", "Joe Flynn", "Ann Cahill", "Sally Fox", "Sil Murphy", "Joe Shine",
+                        "Lisa Collins", "Des Kelly"]
+        runners_id = ["CK-24", "CK-23", "CK-11", "KY-43", "KY-12", "LK-73", "TP-02", "WD-32", "WD-19"]
+
+        displaying_runners_who_have_won_at_least_one_race(races_location, runners_name, runners_id)
+
+        expected_calls = [
+            call('The following runners have all won at least one race:'),
+            call('-' * 55),
+            call('Sil Murphy (LK-73)'),
+            call('Ann Cahill (KY-43)'),
+            call('Lisa Collins (WD-32)'),
+            call('Joe Shine (TP-02)'),
+            call('Sally Fox (KY-12)'),
+        ]
+
+        mock_print.assert_has_calls(expected_calls, any_order=False)
 
 
 

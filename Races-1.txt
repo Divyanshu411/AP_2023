@@ -4,3 +4,4 @@ Newmarket, 29.0
 Youghal, 29.5
 Castletownbere, 32.5
 Cork, 24.0
+Bishopstown, 1826.0
