@@ -32,7 +32,7 @@ def read_integer(prompt):
         except ValueError:
             print("Sorry, numbers only please.")
 
-
+# Reads a float value greater or equal to 0.
 def read_float(prompt):
     while True:
         try:
@@ -182,6 +182,7 @@ def reading_race_results(location):
     return id, time_taken
 
 
+# Reads race results of a specific runner, according to their id, at a given location.
 def reading_race_results_of_relevant_runner(location, runner_id):
     with open(f"{location}.txt") as input_type:
         lines = input_type.readlines()
@@ -200,6 +201,7 @@ def reading_race_results_of_relevant_runner(location, runner_id):
     return None
 
 
+# Goes through all race results and displays only those who have won at least one race.
 def displaying_winners_of_each_race(races_location):
     print("Venue             Winner")
     print("="*24)
@@ -209,6 +211,7 @@ def displaying_winners_of_each_race(races_location):
         print(f"{races_location[i]:<18s}{fastest_runner}")
 
 
+# Displays all runners and takes a user input to print information about the selected runner.
 def relevant_runner_info(runners_name, runners_id):
     for i in range(len(runners_name)):
         print(f"{i + 1}: {runners_name[i]}")
@@ -226,6 +229,7 @@ def convert_time_to_minutes_and_seconds(time_taken):
     return minutes, seconds
 
 
+# Gets a location, creates an organized list of all the final times, and finds where a given time placed.
 def sorting_where_runner_came_in_race(location, time):
     with open(f"{location}.txt") as input_type:
         lines = input_type.readlines()
@@ -240,6 +244,7 @@ def sorting_where_runner_came_in_race(location, time):
     return time_taken.index(time) + 1, len(lines)
 
 
+# Displays the races time of a given competitor at all venues, also displaying the position they finished in.
 def displaying_race_times_one_competitor(races_location, runner, id):
     print(f"{runner} ({id})")
     print(f"-"*35)
@@ -251,6 +256,7 @@ def displaying_race_times_one_competitor(races_location, runner, id):
             print(f"{races_location[i]} {minutes} mins {seconds} secs ({came_in_race} of {number_in_race})")
 
 
+# Given the time of the fastest runner, returns the runner's name.
 def finding_name_of_winner(fastest_runner, id, runners_name):
     runner = ""
     for i in range(len(id)):
@@ -259,6 +265,7 @@ def finding_name_of_winner(fastest_runner, id, runners_name):
     return runner
 
 
+# Goes through all locations and finds the winner of each. The winners are then added to a list and displayed.
 def displaying_runners_who_have_won_at_least_one_race(races_location, runners_name, runners_id):
     print(f"The following runners have all won at least one race:")
     print(f"-" * 55)
@@ -275,8 +282,10 @@ def displaying_runners_who_have_won_at_least_one_race(races_location, runners_na
         print(f"{runners[i]} ({fastest_runner})")
 
 
+# Main function of the code, does initial file reading, takes user input for desired functioning, and exits once the user is finished.
 def main():
     races_location, races_targettime = race_venues()
+    print(races_targettime)
     runners_name, runners_id = runners_data()
     MENU = "\n\n1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
            "\n4. Show the winner of each race \n5. Show all the race times for one competitor " \
