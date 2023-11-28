@@ -142,6 +142,12 @@ class TestDone(unittest.TestCase):
 
         mock_print.assert_has_calls(expected_calls, any_order=False)
 
+    @patch('builtins.input', side_effect=['7'])
+    def test_quit_application_input_menu_7(self, mock_input):
+        with patch('sys.stdout') as mock_stdout:
+            main()
+
+        mock_stdout.assert_not_called()
 
 
 if __name__ == '__main__':
