@@ -111,7 +111,7 @@ class TestDone(unittest.TestCase):
 
         mock_print.assert_has_calls(expected_calls, any_order=False)
 
-    @patch('builtins.input', return_value='1')
+    @patch('ap2.read_integer_between_numbers', return_value=1)
     def test_relevant_runner_info_input_menu_5(self, input):
         runners_name = ["Anna Fox", "Des Kelly", "Ann Cahill"]
         runners_id = ["CK-24", "CK-23", "KY-43"]
