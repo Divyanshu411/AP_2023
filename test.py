@@ -7,7 +7,7 @@ from ap2 import read_integer_between_numbers, race_results, users_venue, competi
 
 class TestDone(unittest.TestCase):
 
-@patch('builtins.input', side_effect=['5'])
+    @patch('builtins.input', side_effect=['5'])
     def test_read_integer_between_numbers_valid_input(self, mock_input):
         result = read_integer_between_numbers("Enter a number between 1 and 7: ", 1, 7, input_function=mock_input)
         self.assertEqual(result, 5)
