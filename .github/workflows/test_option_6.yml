@@ -1,0 +1,23 @@
+name: Test displaying_runners_who_have_won_at_least_one_race function
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+
+    - name: Run displaying_runners_who_have_won_at_least_one_race test
+      run: python -m unittest test.py.TestDone.test_display_runners_who_won_at_least_once_input_menu_6
