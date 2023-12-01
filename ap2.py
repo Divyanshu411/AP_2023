@@ -1,3 +1,4 @@
+import argparse
 # Reads integers between a given minimum and maximum, using the prompt provided.
 def read_integer_between_numbers(prompt, mini, maximum, input_function=input):
     while True:
