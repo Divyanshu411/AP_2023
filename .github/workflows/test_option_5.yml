@@ -1,0 +1,23 @@
+name: Test relevant_runner_info function
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+
+    - name: Run relevant_runner_info test
+      run: python -m unittest test.py.TestDone.test_relevant_runner_info_input_menu_5
