@@ -1,10 +1,8 @@
-import argparse
-
 # Reads integers between a given minimum and maximum, using the prompt provided.
-def read_integer_between_numbers(prompt, mini, maximum, input_function=input):
+def read_integer_between_numbers(prompt, mini, maximum):
     while True:
         try:
-            users_input = int(input_function(prompt))
+            users_input = int(input(prompt))
             if mini <= users_input <= maximum:
                 return users_input
             else:
@@ -286,30 +284,33 @@ def displaying_runners_who_have_won_at_least_one_race(races_location, runners_na
 
 # Main function of the code, does initial file reading, takes user input for desired functioning, and exits once the user is finished.
 def main():
-    parser = argparse.ArgumentParser(description='Race Information System')
-    parser.add_argument('menu_option', type=int, choices=range(1, 8), help='Menu option number (1-7)')
-    args = parser.parse_args()
-
     races_location, races_targettime = race_venues()
+    print(races_targettime)
     runners_name, runners_id = runners_data()
+    MENU = "\n\n1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
+           "\n4. Show the winner of each race \n5. Show all the race times for one competitor " \
+           "\n6. Show all competitors who have won a race \n7. Quit \n>>> "
+    input_menu = read_integer_between_numbers(MENU, 1, 7)
 
-    if args.menu_option == 1:
-        id, time_taken, venue = race_results(races_location)
-        fastest_runner = winner_of_race(id, time_taken)
-        display_races(id, time_taken, venue, fastest_runner)
-    elif args.menu_option == 2:
-        users_venue(races_location, races_targettime, runners_id)
-    elif args.menu_option == 3:
-        competitors_by_county(runners_name, runners_id)
-    elif args.menu_option == 4:
-        displaying_winners_of_each_race(races_location)
-    elif args.menu_option == 5:
-        runner, id = relevant_runner_info(runners_name, runners_id)
-        displaying_race_times_one_competitor(races_location, runner, id)
-    elif args.menu_option == 6:
-        displaying_runners_who_have_won_at_least_one_race(races_location, runners_name, runners_id)
-    else:
-        updating_races_file(races_location, races_targettime)
+    while input_menu != 7:
+        if input_menu == 1:
+            id, time_taken, venue = race_results(races_location)
+            fastest_runner = winner_of_race(id, time_taken)
+            display_races(id, time_taken, venue, fastest_runner)
+        elif input_menu == 2:
+            users_venue(races_location, races_targettime, runners_id)
+        elif input_menu == 3:
+            competitors_by_county(runners_name, runners_id)
+        elif input_menu == 4:
+            displaying_winners_of_each_race(races_location)
+        elif input_menu == 5:
+            runner, id = relevant_runner_info(runners_name, runners_id)
+            displaying_race_times_one_competitor(races_location, runner, id)
+        elif input_menu == 6:
+            displaying_runners_who_have_won_at_least_one_race(races_location, runners_name, runners_id)
+        else: break
+        input_menu = read_integer_between_numbers(MENU, 1, 7)
+    updating_races_file(races_location, races_targettime)
 
-if __name__ == '__main__':
-    main()
+
+main()
