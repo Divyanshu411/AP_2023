@@ -25,4 +25,4 @@ jobs:
         python -m pip install --upgrade pip
 
     - name: Run test_race_results
-      run: python -m unittest test.py.TestDone.test_race_results_valid_input
+      run: python -m unittest test.TestDone.test_race_results_valid_input
