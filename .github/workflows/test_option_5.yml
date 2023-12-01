@@ -20,4 +20,4 @@ jobs:
         python -m pip install --upgrade pip
 
     - name: Run relevant_runner_info test
-      run: python -m unittest test.py.TestDone.test_relevant_runner_info_input_menu_5
+      run: python -m unittest test.TestDone.test_relevant_runner_info_input_menu_5
