@@ -16,7 +16,7 @@ class TestDone(unittest.TestCase):
     def test_race_results_valid_input(self, mock_input):
         races_location = ['Kinsale', 'Blarney', 'Newmarket', 'Youghal', 'Castletownbere']
         with patch('sys.stdout', new_callable=StringIO):
-            id, time_taken, venue = race_results(races_location)
+            id, time_taken, venue = race_results(races_location, 1)
         self.assertEqual(len(id), len(time_taken))
         self.assertEqual(venue, races_location[0])
 
