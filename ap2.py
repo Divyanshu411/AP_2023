@@ -1,8 +1,8 @@
 # Reads integers between a given minimum and maximum, using the prompt provided.
-def read_integer_between_numbers(prompt, mini, maximum):
+def read_integer_between_numbers(prompt, mini, maximum, user_input_function=input):
     while True:
         try:
-            users_input = int(input(prompt))
+            users_input = int(user_input_function(prompt))
             if mini <= users_input <= maximum:
                 return users_input
             else:
