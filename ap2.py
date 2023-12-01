@@ -63,10 +63,16 @@ def runners_data():
 
 
 # Displays the results of a race at a given location, selected by the user, and returns the values.
-def race_results(races_location):
+def race_results(races_location, user_choice):
     for i in range(len(races_location)):
-        print(f"{i+1}: {races_location[i]}")
-    user_input = read_integer_between_numbers("Choice > ", 1, len(races_location))
+        print(f"{i + 1}: {races_location[i]}")
+
+    # Use the provided user_choice instead of reading from input
+    if 1 <= user_choice <= len(races_location):
+        user_input = user_choice
+    else:
+        user_input = read_integer_between_numbers("Choice > ", 1, len(races_location))
+
     venue = races_location[user_input - 1]
     id, time_taken = reading_race_results(venue)
     return id, time_taken, venue
