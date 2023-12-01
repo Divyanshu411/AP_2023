@@ -20,4 +20,4 @@ jobs:
         python -m pip install --upgrade pip
 
     - name: Run displaying_runners_who_have_won_at_least_one_race test
-      run: python -m unittest test.py.TestDone.test_display_runners_who_won_at_least_once_input_menu_6
+      run: python -m unittest test.TestDone.test_display_runners_who_won_at_least_once_input_menu_6
